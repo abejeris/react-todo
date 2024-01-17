@@ -1,16 +1,16 @@
 import List from '@mui/material/List';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import TodoItem from './TodoItem';
 import TodoForm from './TodoForm';
 
-const initialTodos = [
-	{ id: 1, text: 'walk the dog', completed: false },
-	{ id: 2, text: 'walk the cat', completed: true },
-	{ id: 3, text: 'walk the chicken', completed: true },
-];
+const initialTodos = JSON.parse(localStorage.getItem('todos')) || [];
 
 export default function TodoList() {
 	const [todos, setTodos] = useState(initialTodos);
+
+	useEffect(() => {
+		localStorage.setItem('todos', JSON.stringify(todos));
+	}, [todos]);
 
 	const removeTodo = (id) => {
 		setTodos((prevTodos) => {
@@ -30,6 +30,15 @@ export default function TodoList() {
 		});
 	};
 
+	const addTodo = (text) => {
+		setTodos((prevTodos) => {
+			return [
+				...prevTodos,
+				{ text: text, id: crypto.randomUUID(), completed: false },
+			];
+		});
+	};
+
 	return (
 		<List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
 			{todos.map((todo) => (
@@ -42,7 +51,7 @@ export default function TodoList() {
 					toggle={() => toggleTodo(todo.id)}
 				/>
 			))}
-			<TodoForm />
+			<TodoForm addTodo={addTodo} />
 		</List>
 	);
 }
