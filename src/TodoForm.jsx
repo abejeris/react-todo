@@ -17,6 +17,7 @@ export default function TodoForm({ addTodo }) {
 		<form onSubmit={handleSubmit}>
 			<ListItem>
 				<TextField
+					sx={{ width: 1 }}
 					id="outlined-basic"
 					label="Add todo"
 					variant="outlined"
